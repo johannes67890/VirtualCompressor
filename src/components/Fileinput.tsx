@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
+import { useEffect, useState } from "react";
+import Dropzone from "react-dropzone";
 import { UploadIcon } from "@heroicons/react/outline";
+import Logo from "../static/waves.jpg";
 const Fileinput = () => {
+  // const defaultImg = URL.createObjectURL(new Blob(Logo));
   const [file, setFile] = useState<any>();
   const [previewLink, setPreviewLink] = useState<string>();
-
-  useDropzone({
-    accept: "image/jpeg,image/png",
-  });
 
   useEffect(() => {
     // create the preview
@@ -22,7 +20,10 @@ const Fileinput = () => {
     <>
       {/* <label htmlFor="fileinput"></label>
       <input type="file" id="fileinput" /> */}
-      <Dropzone onDrop={(acceptedFiles) => setFile(acceptedFiles)}>
+      <Dropzone
+        accept={"image/jpeg,image/png"}
+        onDrop={(acceptedFiles) => setFile(acceptedFiles)}
+      >
         {({ getRootProps, getInputProps }) => (
           <section className="bg-secondary-200">
             <div {...getRootProps()} className="max-w-5xl h-32 p-3 mx-auto">
@@ -40,7 +41,7 @@ const Fileinput = () => {
         )}
       </Dropzone>
       {file !== undefined ? (
-        <img className="w-44 h-44" id="preview" src={previewLink} alt="" />
+        <img className="max-w-6xl" id="preview" src={previewLink} alt="" />
       ) : null}
     </>
   );
