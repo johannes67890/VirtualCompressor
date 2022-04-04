@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
-import Button from "./Button";
-
+import { UploadIcon } from "@heroicons/react/outline";
 const Fileinput = () => {
   const [file, setFile] = useState<any>();
   const [previewLink, setPreviewLink] = useState<string>();
@@ -27,11 +26,12 @@ const Fileinput = () => {
         {({ getRootProps, getInputProps }) => (
           <section className="bg-secondary-200">
             <div {...getRootProps()} className="max-w-5xl h-32 p-3 mx-auto">
-              <div className="border-2 border-dashed border-secondary-100 h-full">
-                <input {...getInputProps()} onChange={(e) => setFile(e)} />
-                <div className="text-white text-center h-full py-8">
+              <div className="border-2 border-dashed border-secondary-100 h-full rounded-lg">
+                <input {...getInputProps()} onChange={(e: any) => setFile(e)} />
+                <div className="text-white text-center h-full py-4">
+                  <UploadIcon className="w-10 h-10 mx-auto" />
                   <span className="inline-block align-middle">
-                    Drag 'n' drop some files here, or click to select files
+                    Drag 'n' drop some files here, or click to select file
                   </span>
                 </div>
               </div>

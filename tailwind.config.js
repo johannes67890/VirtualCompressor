@@ -2,6 +2,14 @@ module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      keyframes: {
+        dropzone: {
+          "100%": { transform: "rotateZ(360deg)" },
+        },
+      },
+      animation: {
+        dropzone: "dropzone 2s linear infinite ",
+      },
       colors: {
         primary: {
           // https://coolors.co/909db6-748095-586274-3c4453-202631
