@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <div className="bg-secondary-300 rounded-t-md flex gap-2 border-b border-gray-300">
+    <div className="max-w-5xl mx-auto rounded-t-md flex gap-2 border-b border-gray-300">
       <div className="flex flex-col p-3">
         <h1 className="text-4xl">Compression</h1>
         <span className="text-center italic border-b mb-1 pb-2">
@@ -13,7 +13,10 @@ const Header = () => {
             <h2 className="text-center">Made by</h2>
             <span className="text-xs">Johannes67890</span>
           </div>
-          <a href="https://github.com/johannes67890" className="w-10 h-10">
+          <a
+            href="https://github.com/johannes67890"
+            className="w-10 h-10 bg-black rounded-full opacity-90"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
               <path
                 fillRule="evenodd"
