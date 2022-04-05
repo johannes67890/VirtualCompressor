@@ -1,6 +1,7 @@
-const Options: React.FC<{ previewLink: string | undefined }> = ({
-  previewLink,
-}) => {
+const Options: React.FC<{
+  preview: string | undefined;
+  CompressedPreview: string | undefined;
+}> = ({ preview, CompressedPreview }) => {
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
       <MainContentTemplate title="Settings" size="xs">
@@ -8,13 +9,21 @@ const Options: React.FC<{ previewLink: string | undefined }> = ({
       </MainContentTemplate>
 
       <MainContentTemplate title="Preview" size="2xl">
-        {previewLink !== undefined ? (
-          <img
-            className="max-w-md max-h-[24rem] p-3"
-            id="preview"
-            src={previewLink}
-            alt=""
-          />
+        {preview !== undefined ? (
+          <div>
+            <img
+              className="max-w-md max-h-[24rem] p-3"
+              id="preview"
+              src={preview}
+              alt=""
+            />
+            <img
+              className="max-w-md max-h-[24rem] p-3"
+              id="preview"
+              src={CompressedPreview}
+              alt=""
+            />
+          </div>
         ) : null}
       </MainContentTemplate>
     </div>

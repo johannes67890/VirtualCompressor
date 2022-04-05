@@ -3,11 +3,15 @@ import Fileinput from "./components/Fileinput";
 import Options from "./components/Options";
 
 const App = () => {
-  const [previewLink, setPreviewLink] = useState<string>();
+  const [preview, setPreview] = useState<string>();
+  const [CompressedPreview, setCompressedPreview] = useState<string>();
   return (
     <>
-      <Fileinput setPreviewLink={setPreviewLink} />
-      <Options previewLink={previewLink} />
+      <Fileinput
+        setPreview={setPreview}
+        setCompressedPreview={setCompressedPreview}
+      />
+      <Options preview={preview} CompressedPreview={CompressedPreview} />
     </>
   );
 };
