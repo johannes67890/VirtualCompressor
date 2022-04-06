@@ -10,29 +10,36 @@ const Fileinput: React.FC<{
   >;
 }> = ({ setPreview, setCompressedPreview }) => {
   const [file, setFile] = useState<any>();
-  const [Compressed, setCompressed] = useState<any>();
+  const [CompressedFile, setCompressedFile] = useState<File | Blob>();
 
-  const x = new Compressor(file, {
-    quality: 0.1,
-    // The compression process is asynchronous,
-    // which means you have to access the `result` in the `success` hook function.
-    success(result) {
-      setCompressed(result);
-    },
-    error(err) {
-      console.log(err.message);
-    },
-  });
+  const handleCompressedUpload = (e: any) => {
+    let image = new Blob(e);
+    new Compressor(image, {
+      quality: 0.6, // 0.6 can also be used, but its not recommended to go below.
+      success: (result) => {
+        // compressedResult has the compressed file.
+        // Use the compressed file to upload the images to your server.
+        // setCompressedFile(compressedResult);
+        // setCompressedFile(result);
+        console.log("success", result);
+        return (image = result);
+      },
+      error(err) {
+        console.log(err.message);
+      },
+    });
+    return image;
+  };
 
   useEffect(() => {
+    const compressedURL = handleCompressedUpload(file);
     // create the preview
     const OriginalObjectUrl = URL.createObjectURL(new Blob(file));
-    const CompressedObjectUrl = URL.createObjectURL(new Blob(Compressed.file));
     setPreview(OriginalObjectUrl);
+    const CompressedObjectUrl = URL.createObjectURL(compressedURL);
     setCompressedPreview(CompressedObjectUrl);
+    console.log(OriginalObjectUrl, CompressedObjectUrl);
 
-    console.log(Compressed.file);
-    console.log(file);
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(OriginalObjectUrl);
   }, [file]);
@@ -67,7 +74,7 @@ const Fileinput: React.FC<{
                 <div className="border-2 border-dashed border-secondary-100 h-full rounded-lg">
                   <input
                     {...getInputProps()}
-                    onChange={(e: any) => setFile(e)}
+                    // onChange={(e: any) => handleCompressedUpload(e)}
                   />
                   <div className="text-white text-center h-full py-4">
                     <UploadIcon className="w-10 h-10 mx-auto" />
