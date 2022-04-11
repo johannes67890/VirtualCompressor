@@ -4,56 +4,56 @@ import { UploadIcon, XIcon } from "@heroicons/react/outline";
 import Compressor from "compressorjs";
 
 const Fileinput: React.FC<{
-  setPreview: React.Dispatch<React.SetStateAction<string | undefined>>;
-  setCompressedPreview: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
+  setPreview: React.Dispatch<React.SetStateAction<string>>;
+  setCompressedPreview: React.Dispatch<React.SetStateAction<string>>;
 }> = ({ setPreview, setCompressedPreview }) => {
-  const [file, setFile] = useState<any>();
-  const [CompressedFile, setCompressedFile] = useState<any>();
-
-  const handleCompressedUpload = (e: any) => {
-    const image = e.target.files[0];
-    console.log(image);
-
-    new Compressor(image, {
-      quality: 0.1, // 0.6 can also be used, but its not recommended to go below.
-      strict: false,
-      convertSize: 20000,
-      success: (result: any) => {
-        // compressedResult has the compressed file.
-        // Use the compressed file to upload the images to your server.
-        const CompressedObjectUrl = URL.createObjectURL(
-          new File([result], "Compressed Image")
-        );
-        setCompressedPreview(CompressedObjectUrl);
-        console.log(result, "done");
-      },
-      error(err) {
-        console.log(err.message);
-      },
-    });
-  };
+  const [file, setFile] = useState<File[]>([]);
 
   useEffect(() => {
-    // create the preview
-    const OriginalObjectUrl = URL.createObjectURL(new Blob(file));
-    setPreview(OriginalObjectUrl);
-    //setCompressedPreview(CompressedFile);
-    console.log(file, CompressedFile);
+    let OriginalObjectUrl: string = "";
+    let CompressedObjectUrl: string = "";
+    if (file.length != 0) {
+      new Compressor(file[0], {
+        quality: 0.1, // 0.6 can also be used, but its not recommended to go below.
+        strict: false,
+        convertSize: 20000,
+        success: (result: File) => {
+          // compressedResult has the compressed file.
+          // Use the compressed file to upload the images to your server.
+          CompressedObjectUrl = URL.createObjectURL(
+            new File([result], "Compressed Image")
+          );
+          setCompressedPreview(CompressedObjectUrl);
+        },
+        error(err) {
+          console.log(err.message);
+        },
+      });
 
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(OriginalObjectUrl);
+      // create the preview
+      OriginalObjectUrl = URL.createObjectURL(new Blob(file));
+      setPreview(OriginalObjectUrl);
+
+      // free memory when ever this component is unmounted
+      return () => {
+        URL.revokeObjectURL(OriginalObjectUrl);
+        URL.revokeObjectURL(CompressedObjectUrl);
+      };
+    }
   }, [file]);
 
   return (
     <>
-      {file !== undefined ? (
+      {file.length !== 0 ? (
         <section className="bg-gray-400">
           <div className="max-w-5xl h-32 p-3 mx-auto">
             <div
               className="border-2 border-dashed border-gray-100 h-full rounded-lg cursor-pointer"
-              onClick={() => setFile(undefined)}
+              onClick={() => {
+                setFile([]);
+                setPreview("");
+                setCompressedPreview("");
+              }}
             >
               <div className="text-white text-center h-full py-4">
                 <XIcon className="w-10 h-10 mx-auto" />
@@ -70,17 +70,13 @@ const Fileinput: React.FC<{
           accept={"image/jpeg,image/png"}
           onDrop={(acceptedFiles) => {
             setFile(acceptedFiles);
-            handleCompressedUpload(acceptedFiles);
           }}
         >
           {({ getRootProps, getInputProps }) => (
             <section className="bg-secondary-200">
               <div {...getRootProps()} className="max-w-5xl h-32 p-3 mx-auto">
                 <div className="border-2 border-dashed border-secondary-100 h-full rounded-lg">
-                  <input
-                    {...getInputProps()}
-                    // onChange={(e: any) => handleCompressedUpload(e)}
-                  />
+                  <input {...getInputProps()} />
                   <div className="text-white text-center h-full py-4">
                     <UploadIcon className="w-10 h-10 mx-auto" />
 
