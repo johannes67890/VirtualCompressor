@@ -1,17 +1,15 @@
 import { useState } from "react";
 import Fileinput from "./components/Fileinput";
 import Options from "./components/Options";
+import wave from "./static/waves.jpg";
 
 const App = () => {
-  const [preview, setPreview] = useState<string>();
-  const [CompressedPreview, setCompressedPreview] = useState<string>();
+  const [file, setFile] = useState<File[]>([]);
+  const [compressed, setCompressed] = useState<File | undefined>(file[0]);
   return (
     <>
-      <Fileinput
-        setPreview={setPreview}
-        setCompressedPreview={setCompressedPreview}
-      />
-      <Options preview={preview} CompressedPreview={CompressedPreview} />
+      <Fileinput file={file} setFile={setFile} setCompressed={setCompressed} />
+      <Options file={file} compressed={compressed} />
     </>
   );
 };

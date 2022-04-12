@@ -1,7 +1,9 @@
+import Button from "./Button";
+
 const Options: React.FC<{
-  preview: string | undefined;
-  CompressedPreview: string | undefined;
-}> = ({ preview, CompressedPreview }) => {
+  file: Blob[];
+  compressed: File | undefined;
+}> = ({ file, compressed }) => {
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
       <MainContentTemplate title="Settings" size="xs">
@@ -9,26 +11,43 @@ const Options: React.FC<{
       </MainContentTemplate>
 
       <MainContentTemplate title="Preview" size="2xl">
-        {preview !== undefined ? (
+        {compressed !== undefined ? (
           <div>
             <img
               className="max-w-md max-h-[24rem] p-3"
               id="preview"
-              src={preview}
+              src={getImgURL(file)}
               alt=""
             />
-            <img
-              className="max-w-md max-h-[24rem] p-3"
-              id="preview"
-              src={CompressedPreview}
-              alt=""
-            />
+            <div className="flex ">
+              <img
+                className="max-w-md max-h-[24rem] p-3"
+                id="preview"
+                src={getImgURL(compressed)}
+                alt=""
+              />
+              <ul>
+                <li>
+                  <span>size: </span>
+                </li>
+              </ul>
+            </div>
           </div>
         ) : null}
       </MainContentTemplate>
     </div>
   );
 };
+
+function getImgURL(file: File | Blob | Blob[]) {
+  let Url = "";
+  if (Array.isArray(file)) {
+    Url = URL.createObjectURL(new File([file[0]], "Compressed array Image"));
+  } else {
+    Url = URL.createObjectURL(new File([file], "Compressed Image"));
+  }
+  return Url;
+}
 
 const MainContentTemplate: React.FC<{ title: string; size: string }> = ({
   title,

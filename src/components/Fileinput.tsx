@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Dropzone from "react-dropzone";
 import { UploadIcon, XIcon } from "@heroicons/react/outline";
 import Compressor from "compressorjs";
 
 const Fileinput: React.FC<{
-  setPreview: React.Dispatch<React.SetStateAction<string>>;
-  setCompressedPreview: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ setPreview, setCompressedPreview }) => {
-  const [file, setFile] = useState<File[]>([]);
-
+  file: File[];
+  setFile: React.Dispatch<React.SetStateAction<File[]>>;
+  setCompressed: React.Dispatch<React.SetStateAction<File | undefined>>;
+}> = ({ file, setFile, setCompressed }) => {
   useEffect(() => {
-    let OriginalObjectUrl: string = "";
-    let CompressedObjectUrl: string = "";
     if (file.length != 0) {
       new Compressor(file[0], {
         quality: 0.1, // 0.6 can also be used, but its not recommended to go below.
@@ -19,26 +16,13 @@ const Fileinput: React.FC<{
         convertSize: 20000,
         success: (result: File) => {
           // compressedResult has the compressed file.
-          // Use the compressed file to upload the images to your server.
-          CompressedObjectUrl = URL.createObjectURL(
-            new File([result], "Compressed Image")
-          );
-          setCompressedPreview(CompressedObjectUrl);
+          setCompressed(result);
         },
         error(err) {
+          // error handeling
           console.log(err.message);
         },
       });
-
-      // create the preview
-      OriginalObjectUrl = URL.createObjectURL(new Blob(file));
-      setPreview(OriginalObjectUrl);
-
-      // free memory when ever this component is unmounted
-      return () => {
-        URL.revokeObjectURL(OriginalObjectUrl);
-        URL.revokeObjectURL(CompressedObjectUrl);
-      };
     }
   }, [file]);
 
@@ -51,8 +35,7 @@ const Fileinput: React.FC<{
               className="border-2 border-dashed border-gray-100 h-full rounded-lg cursor-pointer"
               onClick={() => {
                 setFile([]);
-                setPreview("");
-                setCompressedPreview("");
+                setCompressed(undefined);
               }}
             >
               <div className="text-white text-center h-full py-4">
@@ -95,50 +78,3 @@ const Fileinput: React.FC<{
 };
 
 export default Fileinput;
-
-/// Sandbox vanilla JS working eksample
-/*
-
-import React, { useState, useEffect } from "react";
-import Compressor from "compressorjs";
-
-const Upload = () => {
-  const [compressedFile, setCompressedFile] = useState();
-
-  const handleCompressedUpload = (e) => {
-    const image = e.target.files[0];
-    new Compressor(image, {
-      quality: 0.1, // 0.6 can also be used, but its not recommended to go below.
-      success: (compressedResult) => {
-        // compressedResult has the compressed file.
-        // Use the compressed file to upload the images to your server.
-        const CompressedObjectUrl = URL.createObjectURL(
-          new File([compressedResult], "test")
-        );
-        setCompressedFile(CompressedObjectUrl);
-        console.log(compressedFile, "test");
-      },
-      error(err) {
-        console.log(err.message);
-      }
-    });
-  };
-
-  return (
-    <div>
-      <input
-        accept="image/*,capture=camera"
-        capture="”camera"
-        type="file"
-        onChange={(event) => handleCompressedUpload(event)}
-      />
-
-      <img id="preview" src={compressedFile} alt="" />
-    </div>
-  );
-};
-
-export default Upload;
-
-
-*/
