@@ -5,15 +5,17 @@ import Compressor from "compressorjs";
 
 const Fileinput: React.FC<{
   file: File[];
+  options: Compressor.Options;
   setFile: React.Dispatch<React.SetStateAction<File[]>>;
   setCompressed: React.Dispatch<React.SetStateAction<File | undefined>>;
-}> = ({ file, setFile, setCompressed }) => {
+}> = ({ file, options, setFile, setCompressed }) => {
   useEffect(() => {
-    if (file.length != 0) {
+    if (file.length !== 0) {
+      console.log("rerender");
+
       new Compressor(file[0], {
-        quality: 0.1, // 0.6 can also be used, but its not recommended to go below.
-        strict: false,
-        convertSize: 20000,
+        ...options,
+
         success: (result: File) => {
           // compressedResult has the compressed file.
           setCompressed(result);
@@ -24,7 +26,7 @@ const Fileinput: React.FC<{
         },
       });
     }
-  }, [file]);
+  }, [options, file]);
 
   return (
     <>
@@ -62,7 +64,6 @@ const Fileinput: React.FC<{
                   <input {...getInputProps()} />
                   <div className="text-white text-center h-full py-4">
                     <UploadIcon className="w-10 h-10 mx-auto" />
-
                     <span className="inline-block align-middle">
                       Drag 'n' drop some files here, or click to select file
                     </span>

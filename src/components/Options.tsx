@@ -1,16 +1,20 @@
+import { useState } from "react";
 import Button from "./Button";
 
 const Options: React.FC<{
   file: Blob[];
   compressed: File | undefined;
-}> = ({ file, compressed }) => {
+  setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
+}> = ({ file, compressed, setOptions }) => {
+  console.log(file[0]?.size, compressed?.size);
+
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
-      <MainContentTemplate title="Settings" size="xs">
+      <MainContentTemplate title="Settings">
         <div>test</div>
       </MainContentTemplate>
 
-      <MainContentTemplate title="Preview" size="2xl">
+      <MainContentTemplate title="Preview">
         {compressed !== undefined ? (
           <div>
             <img
@@ -19,19 +23,23 @@ const Options: React.FC<{
               src={getImgURL(file)}
               alt=""
             />
-            <div className="flex ">
+            <div className="flex">
               <img
                 className="max-w-md max-h-[24rem] p-3"
                 id="preview"
                 src={getImgURL(compressed)}
                 alt=""
               />
-              <ul>
-                <li>
-                  <span>size: </span>
-                </li>
-              </ul>
+              <PreviewInfo
+                name={compressed.name}
+                size={compressed.size}
+                type={compressed.type}
+                URL={getImgURL(compressed)}
+              />
             </div>
+            <Button onClick={() => setOptions({ quality: 0.8 })}>
+              options
+            </Button>
           </div>
         ) : null}
       </MainContentTemplate>
@@ -49,14 +57,39 @@ function getImgURL(file: File | Blob | Blob[]) {
   return Url;
 }
 
-const MainContentTemplate: React.FC<{ title: string; size: string }> = ({
+const PreviewInfo: React.FC<{
+  name: string;
+  size: number;
+  type: string;
+  URL: string;
+}> = ({ name, size, type, URL }) => {
+  return (
+    <div className="p-3 text-lg">
+      <ul className="grid grid-rows-3">
+        <li className="gro">
+          <span className="font-bold">Image name: </span>
+          {name}
+        </li>
+        <li>
+          <span className="font-bold">Image size: </span>
+          {size}
+        </li>
+        <li>
+          <span className="font-bold">Image type: </span>
+          {type}
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const MainContentTemplate: React.FC<{ title: string }> = ({
   title,
-  size,
   children,
 }) => {
   return (
     <div
-      className={`max-w-${size} flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
+      className={`max-w-2xl flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
     >
       <div className="bg-gray-300 rounded-t-lg p-2">
         <h1 className="text-2xl">{title}</h1>
