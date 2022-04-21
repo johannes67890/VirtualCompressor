@@ -7,8 +7,6 @@ const Options: React.FC<{
   options: Compressor.Options;
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
 }> = ({ file, compressed, options, setOptions }) => {
-  console.log(file[0]?.size, compressed?.size);
-
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
       <MainContentTemplate title="Settings">
@@ -88,17 +86,29 @@ const SettingsTemplate: React.FC<{
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
   options: Compressor.Options;
 }> = ({ setOptions, options }) => {
-  // const value: Object[] = Object.keys(options).map((key) => {
-  //   return { text: key, val: key };
-  // });
-  // console.log(value);
-  for (const i in options) {
-    console.log(i);
-  }
-
   return (
     <div>
-      <ul>{}</ul>
+      <ul>
+        <li>
+          <input
+            type="number"
+            step={0.1}
+            placeholder="Default 1"
+            min={0.1}
+            max={1}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              (options.quality = parseFloat(e.target.value))
+            }
+          />
+        </li>
+      </ul>
+      <Button
+        onClick={() => {
+          setOptions({ ...options });
+        }}
+      >
+        Apply
+      </Button>
     </div>
   );
 };
