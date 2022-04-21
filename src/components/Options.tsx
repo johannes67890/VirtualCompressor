@@ -4,14 +4,15 @@ import Button from "./Button";
 const Options: React.FC<{
   file: Blob[];
   compressed: File | undefined;
+  options: Compressor.Options;
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
-}> = ({ file, compressed, setOptions }) => {
+}> = ({ file, compressed, options, setOptions }) => {
   console.log(file[0]?.size, compressed?.size);
 
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
       <MainContentTemplate title="Settings">
-        <div>test</div>
+        <SettingsTemplate setOptions={setOptions} options={options} />
       </MainContentTemplate>
 
       <MainContentTemplate title="Preview">
@@ -79,6 +80,25 @@ const PreviewInfo: React.FC<{
           {type}
         </li>
       </ul>
+    </div>
+  );
+};
+
+const SettingsTemplate: React.FC<{
+  setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
+  options: Compressor.Options;
+}> = ({ setOptions, options }) => {
+  // const value: Object[] = Object.keys(options).map((key) => {
+  //   return { text: key, val: key };
+  // });
+  // console.log(value);
+  for (const i in options) {
+    console.log(i);
+  }
+
+  return (
+    <div>
+      <ul>{}</ul>
     </div>
   );
 };

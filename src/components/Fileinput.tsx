@@ -11,8 +11,6 @@ const Fileinput: React.FC<{
 }> = ({ file, options, setFile, setCompressed }) => {
   useEffect(() => {
     if (file.length !== 0) {
-      console.log("rerender");
-
       new Compressor(file[0], {
         ...options,
 
