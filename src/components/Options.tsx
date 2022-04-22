@@ -16,12 +16,20 @@ const Options: React.FC<{
       <MainContentTemplate title="Preview">
         {compressed !== undefined ? (
           <div>
-            <img
-              className="max-w-md max-h-[24rem] p-3"
-              id="preview"
-              src={getImgURL(file)}
-              alt=""
-            />
+            <div className="flex">
+              <img
+                className="max-w-md max-h-[24rem] p-3"
+                id="preview"
+                src={getImgURL(file)}
+                alt=""
+              />
+              <PreviewInfo
+                name={compressed.name}
+                size={file[0].size}
+                type={file[0].type}
+                URL={getImgURL(compressed)}
+              />
+            </div>
             <div className="flex">
               <img
                 className="max-w-md max-h-[24rem] p-3"
@@ -86,22 +94,32 @@ const SettingsTemplate: React.FC<{
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
   options: Compressor.Options;
 }> = ({ setOptions, options }) => {
+  const defaultSettings = {
+    strict: true,
+    checkOrientation: true,
+    maxHeight: Infinity,
+    maxWidth: Infinity,
+    minHeight: Infinity,
+    minWidth: Infinity,
+    width: undefined,
+    height: undefined,
+    resize: "none",
+    quality: 0.8,
+    mimeType: "auto",
+    convertTypes: ["image/png"],
+    convertSize: 5000000,
+  } as Compressor.Options;
   return (
     <div>
-      <ul>
-        <li>
-          <input
-            type="number"
-            step={0.1}
-            placeholder="Default 1"
-            min={0.1}
-            max={1}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              (options.quality = parseFloat(e.target.value))
-            }
-          />
-        </li>
-      </ul>
+      <ul className="flex flex-row gap-1"></ul>
+      <Button
+        classes="bg-gray-400"
+        onClick={() => {
+          setOptions(defaultSettings);
+        }}
+      >
+        Reset
+      </Button>
       <Button
         onClick={() => {
           setOptions({ ...options });
@@ -110,6 +128,37 @@ const SettingsTemplate: React.FC<{
         Apply
       </Button>
     </div>
+  );
+};
+
+const InputTemplate: React.FC<{
+  title: string;
+  placeholder: string;
+  options: Compressor.Options;
+  setting: Compressor.Options;
+  type: string;
+  min?: number;
+  max?: number;
+  step?: number;
+}> = ({ title, placeholder, options, setting, type, min, max, step }) => {
+  setting as Compressor.Options;
+  return (
+    <li className="min-w-[15rem] mx-auto">
+      <div className="flex gap-1">
+        <span className="font-bold">{title}</span>
+        <input
+          className="min-w-[9.5rem] rounded-md px-2.5 bg-gray-200"
+          type={type}
+          step={step}
+          placeholder={placeholder}
+          min={min}
+          max={max}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            //options.setting = parseFloat(e.target.value);
+          }}
+        />
+      </div>
+    </li>
   );
 };
 
