@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./Button";
-
+import Compressor from "compressorjs";
 const Options: React.FC<{
   file: Blob[];
   compressed: File | undefined;
   options: Compressor.Options;
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
-}> = ({ file, compressed, options, setOptions }) => {
+}> = ({ file, compressed, setOptions }) => {
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
       <MainContentTemplate title="Settings">
-        <SettingsTemplate setOptions={setOptions} options={options} />
+        <SettingsTemplate setOptions={setOptions} />
       </MainContentTemplate>
 
       <MainContentTemplate title="Preview">
@@ -44,9 +44,6 @@ const Options: React.FC<{
                 URL={getImgURL(compressed)}
               />
             </div>
-            <Button onClick={() => setOptions({ quality: 0.8 })}>
-              options
-            </Button>
           </div>
         ) : null}
       </MainContentTemplate>
@@ -92,37 +89,36 @@ const PreviewInfo: React.FC<{
 
 const SettingsTemplate: React.FC<{
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
-  options: Compressor.Options;
-}> = ({ setOptions, options }) => {
-  const defaultSettings = {
-    strict: true,
-    checkOrientation: true,
-    maxHeight: Infinity,
-    maxWidth: Infinity,
-    minHeight: Infinity,
-    minWidth: Infinity,
-    width: undefined,
-    height: undefined,
-    resize: "none",
-    quality: 0.8,
-    mimeType: "auto",
-    convertTypes: ["image/png"],
-    convertSize: 5000000,
+}> = ({ setOptions }) => {
+  const reset = {
+    quality: 0.4,
   } as Compressor.Options;
+  const [settings, setSettings] = useState({ ...reset });
+
   return (
     <div>
-      <ul className="flex flex-row gap-1"></ul>
+      <ul className="flex flex-col gap-1">
+        <InputTemplate
+          title="Quality"
+          setState={setSettings}
+          setting={"quality"}
+          placeholder="Default Value '1'"
+          min={0.1}
+          max={1}
+          step={0.1}
+        />
+      </ul>
       <Button
         classes="bg-gray-400"
         onClick={() => {
-          setOptions(defaultSettings);
+          setOptions(reset);
         }}
       >
         Reset
       </Button>
       <Button
         onClick={() => {
-          setOptions({ ...options });
+          setOptions(settings);
         }}
       >
         Apply
@@ -132,16 +128,15 @@ const SettingsTemplate: React.FC<{
 };
 
 const InputTemplate: React.FC<{
+  setState: React.Dispatch<React.SetStateAction<Compressor.Options>>;
+  setting: any;
   title: string;
   placeholder: string;
-  options: Compressor.Options;
-  setting: Compressor.Options;
-  type: string;
+  type?: string;
   min?: number;
   max?: number;
   step?: number;
-}> = ({ title, placeholder, options, setting, type, min, max, step }) => {
-  setting as Compressor.Options;
+}> = ({ setState, setting, title, placeholder, type, min, max, step }) => {
   return (
     <li className="min-w-[15rem] mx-auto">
       <div className="flex gap-1">
@@ -154,7 +149,10 @@ const InputTemplate: React.FC<{
           min={min}
           max={max}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //options.setting = parseFloat(e.target.value);
+            const value = parseFloat(e.target.value);
+            const obj: { [k: string]: any } = {};
+            obj[setting] = value;
+            setState(obj as Compressor.Options);
           }}
         />
       </div>
