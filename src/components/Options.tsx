@@ -8,40 +8,44 @@ const Options: React.FC<{
 }> = ({ file, compressed, setOptions }) => {
   return (
     <div className="max-w-5xl mx-auto flex mt-5 gap-6">
-      <MainContentTemplate title="Settings">
+      <MainContentTemplate title="Settings" size="20rem">
         <SettingsTemplate setOptions={setOptions} />
       </MainContentTemplate>
 
-      <MainContentTemplate title="Preview">
+      <MainContentTemplate title="Preview" size="40rem">
         {compressed !== undefined ? (
           <div>
             <div className="flex">
-              <img
-                className="max-w-md max-h-[24rem] p-3"
-                id="preview"
-                src={getImgURL(file)}
-                alt=""
-              />
-              <PreviewInfo
-                name={compressed.name}
-                size={file[0].size}
-                type={file[0].type}
-                URL={getImgURL(compressed)}
-              />
+              <div className="w-[25rem] mx-auto">
+                <img
+                  className="max-w-full p-3"
+                  id="preview"
+                  src={getImgURL(file)}
+                  alt=""
+                />
+                <PreviewInfo
+                  name={compressed.name}
+                  size={file[0].size}
+                  type={file[0].type}
+                  URL={getImgURL(compressed)}
+                />
+              </div>
             </div>
             <div className="flex">
-              <img
-                className="max-w-md max-h-[24rem] p-3"
-                id="preview"
-                src={getImgURL(compressed)}
-                alt=""
-              />
-              <PreviewInfo
-                name={compressed.name}
-                size={compressed.size}
-                type={compressed.type}
-                URL={getImgURL(compressed)}
-              />
+              <div className="w-[25rem] mx-auto">
+                <img
+                  className="max-w-full p-3"
+                  id="preview"
+                  src={getImgURL(compressed)}
+                  alt=""
+                />
+                <PreviewInfo
+                  name={compressed.name}
+                  size={compressed.size}
+                  type={compressed.type}
+                  URL={getImgURL(compressed)}
+                />
+              </div>
             </div>
           </div>
         ) : null}
@@ -67,7 +71,7 @@ const PreviewInfo: React.FC<{
   URL: string;
 }> = ({ name, size, type, URL }) => {
   return (
-    <div className="p-3 text-lg">
+    <div className="p-3 text-base">
       <ul className="grid grid-rows-3">
         <li className="gro">
           <span className="font-bold">Image name: </span>
@@ -86,13 +90,14 @@ const PreviewInfo: React.FC<{
   );
 };
 
-const MainContentTemplate: React.FC<{ title: string }> = ({
+const MainContentTemplate: React.FC<{ title: string; size: string }> = ({
   title,
+  size,
   children,
 }) => {
   return (
     <div
-      className={`max-w-2xl flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
+      className={`max-w-5xl min-w-[${size}] flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
     >
       <div className="bg-gray-300 rounded-t-lg p-2">
         <h1 className="text-2xl">{title}</h1>

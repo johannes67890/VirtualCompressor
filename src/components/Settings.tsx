@@ -191,9 +191,12 @@ const InputTemplate: React.FC<{
                 break;
             }
             obj[setting] = value;
-            const ObjConcat = Object.assign(currState, obj);
+            const ObjConcat = Object.assign(
+              currState,
+              obj
+            ) as Compressor.Options;
 
-            setState(ObjConcat as Compressor.Options);
+            setState((prev) => ({ ...prev, ...ObjConcat }));
           }}
         />
       </div>
