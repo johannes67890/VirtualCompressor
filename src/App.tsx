@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Fileinput from "./components/Fileinput";
 import Options from "./components/Options";
-import wave from "./static/waves.jpg";
 
 const App = () => {
   const [file, setFile] = useState<File[]>([]);

@@ -32,7 +32,7 @@ export const SettingsTemplate: React.FC<{
           placeholder="Default 'Infinity'"
           min={0}
           max={Infinity}
-          step={1000}
+          step={100}
           defaultVal={Infinity}
         />
         <InputTemplate
@@ -44,7 +44,7 @@ export const SettingsTemplate: React.FC<{
           placeholder="Default 'Infinity'"
           min={0}
           max={Infinity}
-          step={1000}
+          step={100}
           defaultVal={Infinity}
         />
         <InputTemplate
@@ -56,7 +56,7 @@ export const SettingsTemplate: React.FC<{
           placeholder="Default '0'"
           min={Infinity}
           max={0}
-          step={1000}
+          step={100}
           defaultVal={0}
         />
         <InputTemplate
@@ -80,7 +80,7 @@ export const SettingsTemplate: React.FC<{
           placeholder="Default '0'"
           min={0}
           max={Infinity}
-          step={1000}
+          step={100}
           defaultVal={undefined}
         />
         <InputTemplate
@@ -92,7 +92,7 @@ export const SettingsTemplate: React.FC<{
           placeholder="Default '0'"
           min={0}
           max={Infinity}
-          step={1000}
+          step={100}
           defaultVal={undefined}
         />
         <InputTemplate
@@ -102,9 +102,9 @@ export const SettingsTemplate: React.FC<{
           currState={settings}
           setting={"quality"}
           placeholder="Default '1'"
-          min={0.1}
+          min={0.01}
           max={1}
-          step={0.1}
+          step={0.05}
           defaultVal={0.8}
         />
         <InputTemplate

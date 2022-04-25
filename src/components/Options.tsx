@@ -1,5 +1,6 @@
 import Compressor from "compressorjs";
 import { SettingsTemplate } from "./Settings";
+import { PhotographIcon } from "@heroicons/react/solid";
 const Options: React.FC<{
   file: Blob[];
   compressed: File | undefined;
@@ -15,8 +16,9 @@ const Options: React.FC<{
       <MainContentTemplate title="Preview" size="40rem">
         {compressed !== undefined ? (
           <div>
-            <div className="flex">
+            <div className="flex my-1.5">
               <div className="w-[25rem] mx-auto">
+                <span className="font-bold text-lg">Original Image</span>
                 <img
                   className="max-w-full p-3"
                   id="preview"
@@ -31,8 +33,9 @@ const Options: React.FC<{
                 />
               </div>
             </div>
-            <div className="flex">
+            <div className="flex my-1.5">
               <div className="w-[25rem] mx-auto">
+                <span className="font-bold text-lg">Compressed Image</span>
                 <img
                   className="max-w-full p-3"
                   id="preview"
@@ -48,7 +51,14 @@ const Options: React.FC<{
               </div>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className="flex border-dashed border-2 rounded-md border-gray-400 h-80 m-6">
+            <PhotographIcon
+              width={"5rem"}
+              className={"m-auto block fill-gray-500 "}
+            />
+          </div>
+        )}
       </MainContentTemplate>
     </div>
   );
