@@ -102,9 +102,9 @@ export const SettingsTemplate: React.FC<{
           currState={settings}
           setting={"quality"}
           placeholder="Default '1'"
-          min={0.01}
+          min={0.1}
           max={1}
-          step={0.05}
+          step={0.1}
           defaultVal={0.8}
         />
         <InputTemplate

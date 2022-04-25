@@ -47,6 +47,7 @@ const Options: React.FC<{
                 <PreviewInfo
                   name={compressed.name}
                   size={compressed.size}
+                  sizeDiff={((compressed.size / file[0].size) * 100).toFixed(2)}
                   type={compressed.type}
                   file={compressed}
                 />
@@ -80,9 +81,10 @@ function getImgURL(file: File | Blob | Blob[]) {
 const PreviewInfo: React.FC<{
   name: string;
   size: number;
+  sizeDiff?: string;
   type: string;
   file: Blob[] | File;
-}> = ({ name, size, type, file }) => {
+}> = ({ name, size, sizeDiff, type, file }) => {
   function formatBytes(bytes: number, decimals = 2) {
     if (bytes === 0) return "0 Bytes";
 
@@ -104,7 +106,8 @@ const PreviewInfo: React.FC<{
         </li>
         <li>
           <span className="font-bold">Image size: </span>
-          {formatBytes(size)}
+          {formatBytes(size)}{" "}
+          {sizeDiff != undefined ? <span>({sizeDiff}%)</span> : null}
         </li>
         <li>
           <span className="font-bold">Image type: </span>
