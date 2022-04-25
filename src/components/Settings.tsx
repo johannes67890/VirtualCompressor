@@ -21,7 +21,7 @@ export const SettingsTemplate: React.FC<{
   const [settings, setSettings] = useState({ ...defaultSettings });
 
   return (
-    <>
+    <div className="flex flex-col gap-3 my-4">
       <ul className="flex flex-col gap-4">
         <InputTemplate
           title="Max Width"
@@ -33,17 +33,7 @@ export const SettingsTemplate: React.FC<{
           min={0}
           max={Infinity}
           step={1000}
-        />
-        <InputTemplate
-          title="Min Width"
-          type="number"
-          currState={settings}
-          setState={setSettings}
-          setting={"minWidth"}
-          placeholder="Default '0'"
-          min={Infinity}
-          max={0}
-          step={1000}
+          defaultVal={Infinity}
         />
         <InputTemplate
           title="Max Height"
@@ -55,6 +45,19 @@ export const SettingsTemplate: React.FC<{
           min={0}
           max={Infinity}
           step={1000}
+          defaultVal={Infinity}
+        />
+        <InputTemplate
+          title="Min Width"
+          type="number"
+          currState={settings}
+          setState={setSettings}
+          setting={"minWidth"}
+          placeholder="Default '0'"
+          min={Infinity}
+          max={0}
+          step={1000}
+          defaultVal={0}
         />
         <InputTemplate
           title="Min Height"
@@ -66,6 +69,7 @@ export const SettingsTemplate: React.FC<{
           min={Infinity}
           max={0}
           step={1000}
+          defaultVal={0}
         />
         <InputTemplate
           title="Width"
@@ -77,9 +81,10 @@ export const SettingsTemplate: React.FC<{
           min={0}
           max={Infinity}
           step={1000}
+          defaultVal={undefined}
         />
         <InputTemplate
-          title="height"
+          title="Height"
           type="number"
           currState={settings}
           setState={setSettings}
@@ -88,6 +93,7 @@ export const SettingsTemplate: React.FC<{
           min={0}
           max={Infinity}
           step={1000}
+          defaultVal={undefined}
         />
         <InputTemplate
           title="Quality"
@@ -99,6 +105,7 @@ export const SettingsTemplate: React.FC<{
           min={0.1}
           max={1}
           step={0.1}
+          defaultVal={0.8}
         />
         <InputTemplate
           title="Convert Size"
@@ -110,24 +117,27 @@ export const SettingsTemplate: React.FC<{
           min={0}
           max={5000000}
           step={1000}
+          defaultVal={5000000}
         />
       </ul>
-      <Button
-        classes="bg-gray-400"
-        onClick={() => {
-          setOptions(defaultSettings);
-        }}
-      >
-        Set default
-      </Button>
-      <Button
-        onClick={() => {
-          setOptions(settings);
-        }}
-      >
-        Apply
-      </Button>
-    </>
+      <div className="flex mx-auto gap-2">
+        <Button
+          classes="bg-gray-400"
+          onClick={() => {
+            setOptions(defaultSettings);
+          }}
+        >
+          Set default
+        </Button>
+        <Button
+          onClick={() => {
+            setOptions(settings);
+          }}
+        >
+          Apply
+        </Button>
+      </div>
+    </div>
   );
 };
 
@@ -137,6 +147,7 @@ const InputTemplate: React.FC<{
   setting: any;
   title: string;
   placeholder: string;
+  defaultVal?: number | string;
   type?: string;
   min?: number;
   max?: number;
@@ -147,6 +158,7 @@ const InputTemplate: React.FC<{
   setting,
   title,
   placeholder,
+  defaultVal,
   type,
   min,
   max,
@@ -161,6 +173,7 @@ const InputTemplate: React.FC<{
           type={type}
           step={step}
           placeholder={placeholder}
+          defaultValue={defaultVal}
           min={min}
           max={max}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
