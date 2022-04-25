@@ -11,8 +11,6 @@ const Fileinput: React.FC<{
 }> = ({ file, options, setFile, setCompressed }) => {
   useEffect(() => {
     if (file.length !== 0) {
-      console.log("rerender");
-
       new Compressor(file[0], {
         ...options,
 
@@ -31,7 +29,7 @@ const Fileinput: React.FC<{
   return (
     <>
       {file.length !== 0 ? (
-        <section className="bg-gray-400">
+        <section className="bg-gray-400 hover:transition-all duration-200 ease-in -top-12 sticky hover:top-0">
           <div className="max-w-5xl h-32 p-3 mx-auto">
             <div
               className="border-2 border-dashed border-gray-100 h-full rounded-lg cursor-pointer"

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Fileinput from "./components/Fileinput";
 import Options from "./components/Options";
-import wave from "./static/waves.jpg";
 
 const App = () => {
   const [file, setFile] = useState<File[]>([]);
   const [compressed, setCompressed] = useState<File | undefined>(file[0]);
-  const [options, setOptions] = useState<Compressor.Options>({ quality: 0.1 });
+  const [options, setOptions] = useState<Compressor.Options>({
+    quality: 0.6,
+    convertSize: 500000,
+  });
   return (
     <>
       <Fileinput
@@ -15,7 +17,12 @@ const App = () => {
         setCompressed={setCompressed}
         options={options}
       />
-      <Options file={file} compressed={compressed} setOptions={setOptions} />
+      <Options
+        file={file}
+        compressed={compressed}
+        setOptions={setOptions}
+        options={options}
+      />
     </>
   );
 };
