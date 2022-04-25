@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import Button from "./Button";
 import Compressor from "compressorjs";
+import { SettingsTemplate } from "./Settings";
 const Options: React.FC<{
   file: Blob[];
   compressed: File | undefined;
@@ -84,79 +83,6 @@ const PreviewInfo: React.FC<{
         </li>
       </ul>
     </div>
-  );
-};
-
-const SettingsTemplate: React.FC<{
-  setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
-}> = ({ setOptions }) => {
-  const reset = {
-    quality: 0.4,
-  } as Compressor.Options;
-  const [settings, setSettings] = useState({ ...reset });
-
-  return (
-    <div>
-      <ul className="flex flex-col gap-1">
-        <InputTemplate
-          title="Quality"
-          setState={setSettings}
-          setting={"quality"}
-          placeholder="Default Value '1'"
-          min={0.1}
-          max={1}
-          step={0.1}
-        />
-      </ul>
-      <Button
-        classes="bg-gray-400"
-        onClick={() => {
-          setOptions(reset);
-        }}
-      >
-        Reset
-      </Button>
-      <Button
-        onClick={() => {
-          setOptions(settings);
-        }}
-      >
-        Apply
-      </Button>
-    </div>
-  );
-};
-
-const InputTemplate: React.FC<{
-  setState: React.Dispatch<React.SetStateAction<Compressor.Options>>;
-  setting: any;
-  title: string;
-  placeholder: string;
-  type?: string;
-  min?: number;
-  max?: number;
-  step?: number;
-}> = ({ setState, setting, title, placeholder, type, min, max, step }) => {
-  return (
-    <li className="min-w-[15rem] mx-auto">
-      <div className="flex gap-1">
-        <span className="font-bold">{title}</span>
-        <input
-          className="min-w-[9.5rem] rounded-md px-2.5 bg-gray-200"
-          type={type}
-          step={step}
-          placeholder={placeholder}
-          min={min}
-          max={max}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const value = parseFloat(e.target.value);
-            const obj: { [k: string]: any } = {};
-            obj[setting] = value;
-            setState(obj as Compressor.Options);
-          }}
-        />
-      </div>
-    </li>
   );
 };
 
