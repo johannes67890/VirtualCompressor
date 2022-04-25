@@ -1,4 +1,5 @@
 import Compressor from "compressorjs";
+import React, { useState } from "react";
 import { SettingsTemplate } from "./Settings";
 import { PhotographIcon } from "@heroicons/react/solid";
 import Button from "./Button";
@@ -67,6 +68,7 @@ const Options: React.FC<{
 
 function getImgURL(file: File | Blob | Blob[]) {
   let Url = "";
+
   if (Array.isArray(file)) {
     Url = URL.createObjectURL(new File([file[0]], "Compressed array Image"));
   } else {
@@ -81,6 +83,18 @@ const PreviewInfo: React.FC<{
   type: string;
   file: Blob[] | File;
 }> = ({ name, size, type, file }) => {
+  function formatBytes(bytes: number, decimals = 2) {
+    if (bytes === 0) return "0 Bytes";
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
+
   return (
     <div className="p-3 text-base">
       <ul className="grid grid-rows-3">
@@ -90,12 +104,13 @@ const PreviewInfo: React.FC<{
         </li>
         <li>
           <span className="font-bold">Image size: </span>
-          {size}
+          {formatBytes(size)}
         </li>
         <li>
           <span className="font-bold">Image type: </span>
           {type}
         </li>
+
         <li className="mx-auto my-2">
           <Button
             onClick={() => {
