@@ -1,6 +1,7 @@
 import Compressor from "compressorjs";
 import { SettingsTemplate } from "./Settings";
 import { PhotographIcon } from "@heroicons/react/solid";
+import Button from "./Button";
 const Options: React.FC<{
   file: Blob[];
   compressed: File | undefined;
@@ -16,7 +17,7 @@ const Options: React.FC<{
       <MainContentTemplate title="Preview" size="40rem">
         {compressed !== undefined ? (
           <div>
-            <div className="flex my-1.5">
+            <div className="flex my-1.5 border-b border-gray-300 border-dotted">
               <div className="w-[25rem] mx-auto">
                 <span className="font-bold text-lg">Original Image</span>
                 <img
@@ -29,7 +30,7 @@ const Options: React.FC<{
                   name={compressed.name}
                   size={file[0].size}
                   type={file[0].type}
-                  URL={getImgURL(compressed)}
+                  file={file}
                 />
               </div>
             </div>
@@ -39,14 +40,14 @@ const Options: React.FC<{
                 <img
                   className="max-w-full p-3"
                   id="preview"
-                  src={getImgURL(compressed)}
+                  src={getImgURL(file)}
                   alt=""
                 />
                 <PreviewInfo
                   name={compressed.name}
                   size={compressed.size}
                   type={compressed.type}
-                  URL={getImgURL(compressed)}
+                  file={compressed}
                 />
               </div>
             </div>
@@ -78,12 +79,12 @@ const PreviewInfo: React.FC<{
   name: string;
   size: number;
   type: string;
-  URL: string;
-}> = ({ name, size, type, URL }) => {
+  file: Blob[] | File;
+}> = ({ name, size, type, file }) => {
   return (
     <div className="p-3 text-base">
       <ul className="grid grid-rows-3">
-        <li className="gro">
+        <li>
           <span className="font-bold">Image name: </span>
           {name}
         </li>
@@ -94,6 +95,25 @@ const PreviewInfo: React.FC<{
         <li>
           <span className="font-bold">Image type: </span>
           {type}
+        </li>
+        <li className="mx-auto my-2">
+          <Button
+            onClick={() => {
+              const URL = getImgURL(file);
+
+              fetch(URL).then((res) => {
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = res.url;
+                a.download = `${name}`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(res.url);
+              });
+            }}
+          >
+            Download
+          </Button>
         </li>
       </ul>
     </div>
