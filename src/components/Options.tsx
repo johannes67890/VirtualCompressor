@@ -10,7 +10,7 @@ const Options: React.FC<{
   setOptions: React.Dispatch<React.SetStateAction<Compressor.Options>>;
 }> = ({ file, compressed, setOptions }) => {
   return (
-    <div className="max-w-5xl mx-auto flex mt-5 gap-6">
+    <div className="max-w-5xl mx-auto flex m-5 gap-6">
       <MainContentTemplate title="Settings" size="20rem">
         <SettingsTemplate setOptions={setOptions} />
       </MainContentTemplate>
@@ -117,7 +117,7 @@ const PreviewInfo: React.FC<{
         <li className="mx-auto my-2">
           <Button
             onClick={() => {
-              const URL = getImgURL(file);
+              const URL = getImgURL(file); // download file
 
               fetch(URL).then((res) => {
                 const a = document.createElement("a");
@@ -145,7 +145,7 @@ const MainContentTemplate: React.FC<{ title: string; size: string }> = ({
 }) => {
   return (
     <div
-      className={`max-w-5xl min-w-[${size}] flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
+      className={`max-w-5xl min-w-[${size}] overflow-hidden top-1/4 sticky h-[1%] flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
     >
       <div className="bg-gray-300 rounded-t-lg p-2">
         <h1 className="text-2xl">{title}</h1>
