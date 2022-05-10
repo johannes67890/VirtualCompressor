@@ -145,7 +145,7 @@ const MainContentTemplate: React.FC<{ title: string; size: string }> = ({
 }) => {
   return (
     <div
-      className={`max-w-5xl min-w-[${size}] overflow-hidden top-1/4 sticky h-[1%] flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
+      className={`max-w-5xl min-w-[${size}] overflow-hidden top-1/4 sticky h-[0%] flex-auto flex-col bg-gray-100 rounded-lg border border-gray-300`}
     >
       <div className="bg-gray-300 rounded-t-lg p-2">
         <h1 className="text-2xl">{title}</h1>
