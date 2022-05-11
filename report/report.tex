@@ -9,16 +9,19 @@
 \usepackage{subfig}
 \usepackage{xcolor}
 \usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+%% papir layout
 \geometry{
 a4paper,
 total={170mm,257mm},
 left=15mm,
 top=20mm,
 }
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage{amsmath}
-\usepackage{hyperref}
+
 \definecolor{link}{rgb}{0,0,215}
 \hypersetup{
     colorlinks=true,
@@ -30,8 +33,11 @@ top=20mm,
 
 \graphicspath{ {./img} }
 
+%% Litteraturliste
+\usepackage{biblatex}
+\addbibresource{litteratur.bib}
 
-
+%% Code style
 \definecolor{comment}{rgb}{0,0.45,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -83,4 +89,6 @@ top=20mm,
 
 %% Introdoktion
 \section{Introdoktion}
+Test citate af einstein\cite{einstein}
+\printbibliography[title={Litteraturliste}]
 \end{document}
