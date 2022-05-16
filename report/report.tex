@@ -29,10 +29,11 @@ top=20mm,
     linkcolor=link,
     filecolor=link,      
     urlcolor=link,
+    citecolor=link,
     pdfpagemode=FullScreen,
 }
 
-\graphicspath{ {./img} }
+\graphicspath{ {./img} } %% path to images
 
 %% Litteraturliste
 \usepackage{biblatex}
@@ -90,6 +91,52 @@ top=20mm,
 
 %% Introdoktion
 \section{Introdoktion}
-Test citate af einstein\cite{filecatalyst/movesizes}\cite{Solarwinds/filesizes}\cite{Wiki/dataCompression}
+Denne PDF-fil du læser i, har en filstørrelse på omkring xxx KB. 
+Et gennemsnitligt billede med billedformaten JPG har en størrelse på 11.8 KB,\cite*{Solarwinds/filesizes} og en time lang Fuld HD-video har en størrelse på 1.2 GB.\cite*{filecatalyst/movesizes} 
+Det er mindre effektivt, dyre og langsommere at sende større filer verden rundt via internettet. Men det er her kompression kommer ind i billedet. 
+Kompression er en måde at reducere data, at indkode færre bits end den originale repræsentation af givende data. Hver kompression af et stykke data kan enten være ”Lossy” eller ”Lossless”.\cite*{Wiki/dataCompression} 
+Lossless kompression er en reduktion af data uden noget data går tabt, hvor lossy kompression er hvor noget af den originale data bliver slette.
+\section{LZ77 Algoritme}
+
+LZ77 (også kaldt LZ1) algoritme er en lossless data kompression algoritme udviklet af Lempel og Ziv i 1977. 
+Der er flere forskellige variationer af LZ77 algoritmen (LZ78 samt LZSS) og algoritmerne kan bruges til forskellige formål. Men alle af LZ-algoritmerne grundlæggende princip er det samme. 
+Algoritme-serien er adopteret af mange forskellige systemer, mest kendt i GIF og DEFLATE algoritmen som bruges i ZIP og PNG.\cite*{Wiki/LZ77}\\\newline
+Den grundlæggende algoritme LZ77 komprimerer gentagende data med at referater, som tidligere eksisterede data i den ukomprimerede data. Referatet til det gentaget data bliver til et talpar, 
+dette kan også kaldes for en ”pointer”. Udsagnet ”pointer” er et tal (en integrer) som refererer til et stykke data’s adresse i hukommelsen. 
+Talparet er kaldt ”length-distance pair”, som svare til udsagte ”hvert af de næste længdetegn er lig med tegnene nøjagtigt afstandstegn bagved i den ukomprimerede strøm”. 
+Talparet er et output af tal (\boldmath(D)istance, \boldmath(L)ength, \boldmath(c)harater) som er defineret ved:
+\[[D,L,c]\] 
+\begin{itemize}
+  \item \boldmath(D): Afstanden for antal positioner, der flyttes bagud for at finde starten af den matchende data.
+  \item \boldmath(L): Længden af det matchende data.
+  \item \boldmath(c): Karakteren som er repræsenteret efter det matchende data er fundet.
+\end{itemize}
+LZ77 algoritmen itererer (køre igennem/gentag) igennem et stykke data, for at finde den længste sekvens af data som bliver brugt flere gange. Sker der et match i et par datastykker, 
+bliver de matchene datastykker gemt. 
+
+
+
+\begin{lstlisting}[language=JavaScript, caption=LZ77 Pseudocode teoritisk]
+while input is not empty do
+  match := longest repeated occurrence of input that begins in window
+  
+  if match exists then
+      d := distance to start of match
+      l := length of match
+      c := char following match in input
+  else
+      d := 0
+      l := 0
+      c := first char of input
+  end if
+  
+  output (d, l, c)
+  
+  discard l + 1 chars from front of window
+  s := pop l + 1 chars from front of input
+  append s to back of window
+repeat
+
+\end{lstlisting}
 \printbibliography[title={Litteraturliste}]
 \end{document}
