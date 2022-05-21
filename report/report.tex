@@ -112,10 +112,81 @@ Talparet er et output af tal (\boldmath(D)istance, \boldmath(L)ength, \boldmath(
   \item \boldmath(c): Karakteren som er repræsenteret efter det matchende data er fundet.
 \end{itemize}
 LZ77 algoritmen itererer (køre igennem/gentag) igennem et stykke data, for at finde den længste sekvens af data som bliver brugt flere gange. Sker der et match i et par datastykker, 
-bliver de matchene datastykker gemt. 
+bliver de matchene datastykker gemt.
 
+\subsection{Eksempel og gennemgang}
+En måde at kunne visualisere LZ77 algoritmen er med en gennemgang af et eksempel. For at kunne simplificere hvad algoritmen gør, bruger jeg en streng med gentagende bogstaver. 
+LZ77 er ikke kun brugbar i tekst kompression, men også andre dataformater.\cite{yt/LZ77}\\
+Eksempel streng er til kompression:\\
+\[AABCBBABC\]
+Når LZ-algoritmen interager igennem strengen, er algoritmens intuition kun til at komprimere allerede fundet bogstaver, 
+og point tilbage til bogstavets placering i den originale streng. 
+Følgende skema viser gennemgangen af komprimeringen af strengen. Hvis algoritmen ikke har set eller fundet data før, bliver outputtet repræsenteret til en \([0,0,c]\) 
+pointer som pointere til sig selv. Ellers bliver den outputtet til en pointer med ”length-distance pair” som nævn før \([D,L,c]\).
 
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{ |c|c|c|c| }
+   \hline
+   \textbf{Position} & \textbf{Match} & \textbf{Byte} & \textbf{Output} \\ 
+   \hline
+   1 & $\oslash$ & $A$ & \([0,0,A]\) \\
+   \hline
+   2 & $A$ & $\oslash$ & \([1,1]\) \\
+   \hline
+   3 & $\oslash$ & $B$ & \([0,0,B]\) \\
+   \hline
+   4 & $\oslash$ & $C$ & \([0,0,C]\) \\
+   \hline
+   5 & $B$ & $\oslash$ & \([2,1]\) \\
+   \hline
+   6 & $B$ & $\oslash$ & \([1,1]\) \\
+   \hline
+   7 & $ABC$ & $\oslash$ & \([5,3]\) \\
+   \hline
+  \end{tabular}\\
+\end{table}
+Det resulterende komprimeret output er:\\
+\[[0,0,A]  [1,1]  [0,0,B]  [0,0,C]  [2,1]  [1,1]  [5,3]\]
+Hvis vi simplificerer outputtet til at det kun er direkte referater til forrige data, ser det sådan ud:\\
+\[A [1,1]  B C [2,1]  [1,1]  [5,3]\]
+For at finde frem til den originale data igen, gøres det samme som ved kompression bare baglæns. 
+Så skidt 1 finder vi et $A$ hvor vi efter får en pointer \([1,1]\) i skridt 2, til at gå et skidt tilbage i strengen, som er den tilsvarende byte $A$. 
+Dermed bliver det nye output til $AA$ og så ledes. Følgende tabel viser skridtene til at få det originale data af den kom komprimeret data:
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{ |c|c|c|c| }
+   \hline
+   \textbf{skridt} & \textbf{Pointer} & \textbf{Tilsvarende Byte(s)} & \textbf{Output streng} \\ 
+   \hline
+   1 &  \([0,0,A]\) & $A$ & $A$ \\
+   \hline
+   2 & \([1,1]\) & $A$ & $AA$ \\
+   \hline
+   3 &  \([0,0,B]\) & $B$ & $AAB$ \\
+   \hline
+   4 &  \([0,0,C]\) & $C$ & $AABC$ \\
+   \hline
+   5 & \([2,1]\) & $B$ & $AABCB$ \\
+   \hline
+   6 & \([1,1]\) & $B$ & $AABCBB$ \\
+   \hline
+   7 & \([5,3]\) & $ABC$ & $AABCBBABC$ \\
+   \hline
+  \end{tabular}\\
+\end{table}
+Eksemplet ser det ikke ud som om at vores originale data er blevet mere komprimeret, 
+da der er nu kommet flere bytes end før. Hvis et bogstav er 1 byte og en pointer består af 2 tal som er 2 bytes i alt:\\
+\[AABCBBABC = A [1,1]  B C [2,1]  [1,1]  [5,3]\] 
+\[\Longleftrightarrow \]
+\[9  bytes < 11 bytes\] 
+Dog i en større skala bliver dette bedre mening end eksemplet. Hvis vores eksempel var en længere tekst, kan fordelene se bedre ud:\\
 
+\begin{tabular}{lll}
+  Originale: & \textit{Det nye computerspil er meget optimeret til computeren} & 47 bytes \\
+  komprimeret: & \textit{Det nye computerspil er meget optimeret til $[31,8]$en} & 41 bytes
+\end{tabular}
+\newpage
 \begin{lstlisting}[language=JavaScript, caption=LZ77 Pseudocode teoritisk]
 while input is not empty do
   match := longest repeated occurrence of input that begins in window
