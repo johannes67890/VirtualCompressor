@@ -16,6 +16,7 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 
+
 %% papir layout
 \geometry{
 a4paper,
@@ -250,9 +251,9 @@ Der er adskillige kompressionsalgoritmer og metoder. Den mest kendte algoritme i
 DEFLATE algoritmen er en kombination af Huffman coding og LZ77 algoritmerne. Dette opnår fleksibel komprimerings evner som er brugt i forskellige applikationer, 
 mest kendt for deres brug i gzip komprimeret filer og PNG-billedfiler.
 \subsection{Gennemgang af min kode}
-Projektet som jeg har lavet, er en virtuel fremvisning af komprimeringen af billeder. Projektet er en hjemmeside som gør det muligt for brugeren at uploade et billede og få det komprimeret. 
+Projektet som jeg har lavet, er en virtuel fremvisning af komprimeringen af billeder.\cite{github} Projektet er en hjemmeside som gør det muligt for brugeren at uploade et billede og få det komprimeret. 
 indstillingerne for komprimeringen er både højde, brede og kvalitet af billedet. \\\\
-Jeg har med brug af en importeret bibliotek ”Compressorjs”\cite{Compressorjs} som bruger browserens indbygget API canvas.toBlob, til kompensation. 
+Jeg har med brug af et importeret bibliotek ”Compressorjs”\cite{Compressorjs} som bruger browserens indbygget API \href{https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob}{canvas.toBlob}, til kompression. 
 Dette gør at alle billedfiler som bliver uploadet, er der kun mulighed for en lossy komprimering. Til udvikling af hjemmesiden bruger jeg React og TailwindCSS som framework. \\\\\\
 Når brugeren uploader en billedfil til hjemmesiden, bliver filen tildelt kompressionsbiblioteket. Bibliotek komprimerer derefter billedfilen ud fra indstilleringerne som brugeren har valgt:\\
 \noindent\begin{minipage}{.4\textwidth}
@@ -343,5 +344,7 @@ repeat
   \caption{\centering Illustration af Projekte app}
 \end{figure}
 \newpage
+
 \printbibliography[title={Litteraturliste}]
+
 \end{document}
