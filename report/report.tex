@@ -7,6 +7,8 @@
 \usepackage{fancyhdr}
 \usepackage{listings}
 \usepackage{subfig}
+\usepackage{floatrow}
+\usepackage{float}
 \usepackage{xcolor}
 \usepackage{geometry}
 \usepackage{graphicx}
@@ -91,7 +93,7 @@ top=20mm,
 
 %% Introdoktion
 \section{introduktion}
-Denne PDF-fil du læser i, har en filstørrelse på omkring xxx KB. 
+Denne PDF-fil du læser i, har en filstørrelse på omkring 1.2 KB. 
 Et gennemsnitligt billede med billedformaten JPG har en størrelse på 11.8 KB,\cite*{Solarwinds/filesizes} og en time lang Fuld HD-video har en størrelse på 1.2 GB.\cite*{filecatalyst/movesizes} 
 Det er mindre effektivt, dyre og langsommere at sende større filer verden rundt via internettet. Men det er her kompression kommer ind i billedet. 
 Kompression er en måde at reducere data, at indkode færre bits end den originale repræsentation af givende data. Hver kompression af et stykke data kan enten være ”Lossy” eller ”Lossless”.\cite*{Wiki/dataCompression} 
@@ -198,11 +200,12 @@ tilkoblingen til venstre underordnede node repræsenterer bit \textit{’0’}, 
 sandsynlighed for det symbol de repræsenterer. Symbolerne i Huffmans tree er sorteret efter sandsynlighed, den korteste vej i Huffmans tree er til det hyppigste symbol.\\
 \begin{figure}[ht]%
   \centering
-  \includegraphics[width=7cm]{Huffman_coding_example.png}%
+  \includegraphics[width=7.5cm]{Huffman_coding_example.png}%
   \caption{\centering Eksempel på Huffmans Tree på data symbolerne a1, a2, a3, a4 \cite{Wiki/Huffman}}\label{Huffmans}%
 \end{figure}\\
-Figur \ref{Huffmans} er et eksempel på Huffmans tree på data symbolerne a1, a2, a3, a4. De røde tal er sandsynligheden for hyppigheden for symbolerne. 
-Hver route til hver node har et repræsenteret bitværdi (\textit{0} eller \textit{1}).  
+Figur \ref{Huffmans} er et eksempel på Huffmans tree på data symbolerne {a1, a2, a3, a4}. De røde tal er sandsynligheden for hyppigheden for symbolerne.
+Hver route til hver node har et repræsenteret bitværdi (\textit{0} eller \textit{1}). \\
+Den repræsenterende kode for symbolerne i Huffmans tree vil blive inddelt ud fra sandsynligheden for hyppigheden for symbolet:
 \begin{table}[ht]
   \centering
   \begin{tabular}{ |c|c| }
@@ -217,10 +220,102 @@ Hver route til hver node har et repræsenteret bitværdi (\textit{0} eller \text
    \hline
    a4 &  111 \\
    \hline
-  \end{tabular}\\
+  \end{tabular}
 \end{table}
+\newpage
+\subsection{Eksempel}
+Hvis vi tag samme eksempel som brugt i LZ77 algorithmen, ser Huffmans tree således ud:
+\begin{figure}[ht]%
+  \centering
+  \includegraphics[width=5.5cm]{Huffman_abc_example.png}%
+  \caption{\centering \textit{n} er mængden af symbolets hyppighed}%
+\end{figure}\\
+Den repræsenterende kode for symbolerne i Huffmans tree for eksemplet:
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{ |c|c| }
+   \hline
+   \textbf{Symbol} & \textbf{Kode} \\
+   \hline
+   B &  0  \\
+   \hline
+   A & 10  \\
+   \hline
+   C &  11 \\
+   \hline
+  \end{tabular}
+\end{table}
+\section{Metode og analyse}
+Der er adskillige kompressionsalgoritmer og metoder. Den mest kendte algoritme inden for komprimering af filer og billeder er DEFLATE algoritmen. 
+DEFLATE algoritmen er en kombination af Huffman coding og LZ77 algoritmerne. Dette opnår fleksibel komprimerings evner som er brugt i forskellige applikationer, 
+mest kendt for deres brug i gzip komprimeret filer og PNG-billedfiler.
+\subsection{Gennemgang af min kode}
+Projektet som jeg har lavet, er en virtuel fremvisning af komprimeringen af billeder. Projektet er en hjemmeside som gør det muligt for brugeren at uploade et billede og få det komprimeret. 
+indstillingerne for komprimeringen er både højde, brede og kvalitet af billedet. \\\\
+Jeg har med brug af en importeret bibliotek ”Compressorjs”\cite{Compressorjs} som bruger browserens indbygget API canvas.toBlob, til kompensation. 
+Dette gør at alle billedfiler som bliver uploadet, er der kun mulighed for en lossy komprimering. Til udvikling af hjemmesiden bruger jeg React og TailwindCSS som framework. \\\\\\
+Når brugeren uploader en billedfil til hjemmesiden, bliver filen tildelt kompressionsbiblioteket. Bibliotek komprimerer derefter billedfilen ud fra indstilleringerne som brugeren har valgt:\\
+\noindent\begin{minipage}{.4\textwidth}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{2.png}%
+    \caption{\centering Illustration af 'Settings'}%
+  \end{figure}
+  \end{minipage}\hfill
+  \begin{minipage}{.55\textwidth}
+  \begin{lstlisting}[language=JavaScript, caption=Indsættelse af fil i Compressorjs bibliotek]
+if (file.length !== 0) {
+  new Compressor(file[0], {
+    ...options, // parse user options
+    success: (result: File) => {
+      // set React hook to result
+      setCompressed(result); 
+    },
+    error(err) {
+      // error handeling
+      console.log(err.message);
+    },
+  });
+}
+  \end{lstlisting}
+\end{minipage}\\\\
+Det komprimeret billede bliver derefter fremvist til brugeren om både differencen for den komprimeret filstørrelse forhold til det originale billede.
+Samt får brugeren mulighed til at downloade det komprimeret billede:\\
+\noindent\begin{minipage}{.4\textwidth}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{1.png}%
+    \caption{\centering Illustration af 'preview'}%
+  \end{figure}
+  \end{minipage}\hfill
+  \begin{minipage}{.55\textwidth}
+    \begin{lstlisting}[language=JavaScript, caption=Download komprimeret billede med knap]
+onClick={() => {
+  // get URL from compressed file
+  const URL = getImgURL(file); 
 
-\begin{lstlisting}[language=JavaScript, caption=LZ77 Pseudocode teoritisk]
+  fetch(URL).then((res) => { 
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = res.url;
+    a.download = `${name}`; 
+    document.body.appendChild(a);
+    a.click();
+    // Memory cleanup
+    window.URL.revokeObjectURL(res.url); 
+  });
+}}
+   \end{lstlisting}
+\end{minipage}
+Efter en kompression af et billed for \textit{0,1} af kvaliteten af det originale billed, fås en reduktion på 87\% eller 13\% af det originale billed. Dette er en kompression fra $451$ MB til $58$ MB 
+\begin{figure}[ht]%
+  \centering
+  \subfloat[\centering Det originale billed - før kompression]{{\includegraphics[width=8.25cm]{before.jpg} }}%
+  \subfloat[\centering Det komprimere billed - efter kompression]{{\includegraphics[width=8.25cm]{after.jpg} }}%
+\end{figure}
+\newpage
+\section{Bilag}
+\begin{lstlisting}[language=JavaScript, caption=LZ77 Pseudocode]
 while input is not empty do
   match := longest repeated occurrence of input that begins in window
   
@@ -242,5 +337,11 @@ while input is not empty do
 repeat
 
 \end{lstlisting}
+\begin{figure}[ht]%
+  \centering
+  \includegraphics[width=17cm]{Apppreview.png}
+  \caption{\centering Illustration af Projekte app}
+\end{figure}
+\newpage
 \printbibliography[title={Litteraturliste}]
 \end{document}
