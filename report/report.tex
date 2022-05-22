@@ -187,6 +187,39 @@ Dog i en større skala bliver dette bedre mening end eksemplet. Hvis vores eksem
   komprimeret: & \textit{Det nye computerspil er meget optimeret til $[31,8]$en} & 41 bytes
 \end{tabular}
 \newpage
+\section{Huffman coding}
+Huffman coding er en algorithme for lossless kompression, udviklet af David A, Huffman. Metoden blev først set af offeligheden i 1952 i Huffmans rapport 
+”A Method for the Construction of Minimum-Redundancy Codes”.\cite*{Wiki/Huffman} \\\\
+Den generelle ide bag metoden er at opdele de mest hyppige værdier i et stykke data. Værdierne får uddelt deres egen præfikskode (deres eget symbol eller værdi) i et binary tree.
+Hyppigheden af forekomsten af værdien, bliver binary tree’et kortere. Dette binary tree bliver også kaldt for et ”Huffman tree”\cite{yt/Huffman} \\\\
+Huffmans tree er bygget op så ledes at hver node (datapunkter i et binary tree eller anden datastruktur), indeholder symbolet selv og vægten (hyppigheden af nodes fremkomst). 
+Noderne er også tilkoblet til to underordnede noder, samt en tilkobling til en overordnet node. Tilkoblingen til noden repræsenterer en tilsvarende bit, 
+tilkoblingen til venstre underordnede node repræsenterer bit \textit{’0’}, hvor højre underordnede node er repræsentere bit \textit{’1’}. Ud fra mængden af nodes i Huffmans tree, er hver tilkobling til hver node udstyret med en 
+sandsynlighed for det symbol de repræsenterer. Symbolerne i Huffmans tree er sorteret efter sandsynlighed, den korteste vej i Huffmans tree er til det hyppigste symbol.\\
+\begin{figure}[ht]%
+  \centering
+  \includegraphics[width=7cm]{Huffman_coding_example.png}%
+  \caption{\centering Eksempel på Huffmans Tree på data symbolerne a1, a2, a3, a4 \cite{Wiki/Huffman}}\label{Huffmans}%
+\end{figure}\\
+Figur \ref{Huffmans} er et eksempel på Huffmans tree på data symbolerne a1, a2, a3, a4. De røde tal er sandsynligheden for hyppigheden for symbolerne. 
+Hver route til hver node har et repræsenteret bitværdi (\textit{0} eller \textit{1}).  
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{ |c|c| }
+   \hline
+   \textbf{Symbol} & \textbf{Kode} \\
+   \hline
+   a1 &  0  \\
+   \hline
+   a2 & 10  \\
+   \hline
+   a3 &  110 \\
+   \hline
+   a4 &  111 \\
+   \hline
+  \end{tabular}\\
+\end{table}
+
 \begin{lstlisting}[language=JavaScript, caption=LZ77 Pseudocode teoritisk]
 while input is not empty do
   match := longest repeated occurrence of input that begins in window
