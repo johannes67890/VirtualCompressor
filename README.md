@@ -12,7 +12,7 @@
 
 #### - Tailwindcss
 
-### - [Compressorjs](https://github.com/fengyuanchen/compressorjs)
+#### - [Compressorjs](https://github.com/fengyuanchen/compressorjs)
 
 ## How to build and run the program
 
