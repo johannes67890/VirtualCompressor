@@ -2,6 +2,17 @@
 
 ![preview](./report/img/Apppreview.png "Website Preview")
 
+```
+Teachers feedback to next time
+
+> Grade: A- (12 *Arrow down*)
+
+- More focus on methods (Flowcharts, class diagram, explain Object focus programming and more)
+- Have Powerpoint to bring more structure
+- Focus more on code 
+- Put Sources before extra content (Bilag)
+```
+
 ###### Made by Johannes67890
 
 #### School project (Yearly test - Open assignment)
